@@ -1,0 +1,3 @@
+/ GET | GET params: []
+/favicon.ico GET | GET params: []
+/ GET | GET params: []

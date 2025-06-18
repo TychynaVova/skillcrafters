@@ -1,0 +1,7 @@
+RewriteEngine On
+
+# Исключение для статических файлов (CSS, JS, изображения)
+RewriteCond %{REQUEST_URI} !\.(css|js|jpg|jpeg|png|gif|ico)$ [NC]
+
+# Перенаправление всех остальных запросов на index.php внутри public
+RewriteRule ^(.*)$ /public/index.php?url=$1 [QSA,L]

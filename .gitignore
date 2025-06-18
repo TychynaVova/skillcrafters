@@ -1,0 +1,36 @@
+# PHP
+/vendor/
+*.log
+*.cache
+*.tmp
+*.lock
+.env
+*.txt
+
+# IDE
+.idea/
+.vscode/
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Composer
+composer.lock
+
+# Nginx / Apache temp
+*.swp
+
+# Custom cache
+/cache/
+/storage/
+/uploads/
+/*.bak
+
+# Misc
+*.sql
+/public/js/build/
+/public/css/build/
