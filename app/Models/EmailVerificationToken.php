@@ -18,7 +18,7 @@ class EmailVerificationToken
         $stmt = $this->db->prepare(
             "INSERT INTO email_verification_tokens (email, token, expires_at) VALUES (?, ?, ?)"
         );
-        $stmt->execute([$email, $token, $expires_at]);
+        return $stmt->execute([$email, $token, $expires_at]);
     }
 
     public function getTokenData($token)

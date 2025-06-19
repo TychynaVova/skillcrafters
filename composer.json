@@ -1,0 +1,19 @@
+{
+    "name": "tychyna/skillcrafters",
+    "description": "онлайн обучение",
+    "require": {
+        "psr/log": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Logger\\": "src/Logger/"
+        }
+    },
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "config": {
+        "platform": {
+            "php": "7.4.33"
+        }
+    }
+}

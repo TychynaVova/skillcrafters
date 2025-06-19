@@ -4,28 +4,55 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Models\User;
-use App\Models\EmailVerificationToken; 
+use App\Models\EmailVerificationToken;
 
 class RegisterController extends Controller
 {
 
-    public function registerUser($input)
+    public function registerUser(array $input): array
     {
-        $email = $input['email'];
+        // Проверяем наличие email в input
+        if (empty($input['email'])) {
+            return ['status' => 'error', 'message' => 'Email не передан'];
+        }
 
+        $email = trim($input['email']);
+
+        // Валидация email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return ['status' => 'error', 'message' => 'Неверный формат email'];
         }
 
+        // Проверка, существует ли пользователь с таким email
+        $user = new User();
+        $existingUser = $user->findByEmail($email);
+        if ($existingUser) {
+            return ['status' => 'error', 'message' => 'Пользователь с таким email уже зарегистрирован'];
+        }
+
+        // Генерация токена для подтверждения
         $token = $this->generateToken();
         $expires_at = date('Y-m-d H:i:s', strtotime('+24 hours'));
 
+        // Сохраняем токен в отдельной таблице или в users — зависит от реализации
         $emailVerificationTokenModel = new EmailVerificationToken();
-        $emailVerificationTokenModel->saveToken($email, $token, $expires_at);
+        $saved = $emailVerificationTokenModel->saveToken($email, $token, $expires_at);
 
-        $this->sendConfirmationEmail($email, $token);
+        if (!$saved) {
+            return ['status' => 'error', 'message' => 'Ошибка при сохранении токена'];
+        }
 
-        return ['status' => 'success', 'message' => 'Письмо с подтверждением было отправлено на ваш email. Подтвердите регистрацию.'];
+        // Отправляем письмо подтверждения
+        $sent = $this->sendConfirmationEmail($email, $token);
+
+        if (!$sent) {
+            return ['status' => 'error', 'message' => 'Ошибка при отправке письма подтверждения'];
+        }
+
+        return [
+            'status' => 'success',
+            'message' => 'Письмо с подтверждением было отправлено на ваш email. Подтвердите регистрацию.'
+        ];
     }
 
 
@@ -36,7 +63,7 @@ class RegisterController extends Controller
 
     private function sendConfirmationEmail($email, $token)
     {
-        $confirmationLink = BASE_URL."confirm?token=" . urlencode($token);
+        $confirmationLink = BASE_URL . "confirm?token=" . urlencode($token);
         $templatePath = __DIR__ . '/../../public/emails/email_template.html';
 
         if (!file_exists($templatePath)) {

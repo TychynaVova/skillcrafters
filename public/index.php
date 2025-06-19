@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
 require_once __DIR__ . '/../app/Config/config.php';
 require_once __DIR__ . '/../app/Routes/Router.php';
 require_once __DIR__ . '/../app/Helpers/helpers.php';
@@ -25,8 +27,6 @@ spl_autoload_register(function ($class) {
     }
 });
 
-\App\Core\Logger::logRequest();
-
 // Ініціалізація роутера
 $router = new Router();
 $router->get('/', 'HomeController@index');
@@ -35,6 +35,7 @@ $router->get('/confirm', 'ConfirmController@confirmEmail');
 $router->post('/confirmRegister', 'ConfirmController@addUser');
 $router->get('/dashboardUser', 'HomeController@dashboardUser');
 $router->get('/dashboardAdmin', 'HomeController@dashboardAdmin');
+$router->post('/login', 'AuthController@login');
 
 // Обробка запиту
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

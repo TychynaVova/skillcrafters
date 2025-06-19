@@ -4,10 +4,19 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Models\User;
+use App\Core\View;
 use App\Models\EmailVerificationToken;
+use Logger\SimpleLogger;
 
 class AuthController extends Controller
 {
+
+    private SimpleLogger $logger;
+
+    public function __construct()
+    {
+        $this->logger = new SimpleLogger(__DIR__ . '/../../logs');
+    }
 
     // Обработка регистрации пользователя
     public function registerUser($email)
@@ -48,5 +57,58 @@ class AuthController extends Controller
 
         // Отправляем письмо
         mail($email, $subject, $message, $headers);
+    }
+
+    public function login(array $input)
+    {
+        $email = $input['email'] ?? '';
+        $password = $input['password'] ?? '';
+        $userModel = new User();
+        $user = $userModel->findByEmail($email);
+
+        if (!$user) {
+            $this->logger->error("Спроба входу з неіснуючим email", ['email' => $email, 'input' => json_encode($input, JSON_UNESCAPED_UNICODE)]);
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'error', 'message' => 'Користувача не знайдено.']);
+            exit;
+        }
+
+        if (!password_verify($password, $user->getPassword())) {
+            $this->logger->error("Невірний пароль при вході", ['email' => $email]);
+            return ['status' => 'error', 'message' => 'Невірний email або пароль.'];
+        }
+
+        session_start();
+        $_SESSION['user_id'] = $user->getId();
+        $_SESSION['email'] = $user->getEmail();
+        $_SESSION['role'] = $user->getRoleId() ?? 'user';
+
+        $this->logger->info("Користувач увійшов успішно", [
+            'id'    => $user->getId(),
+            'email' => $user->getEmail(),
+            'role'  => $user->getRoleId()
+        ]);
+
+        // Роутинг залежно від ролі
+        switch ($_SESSION['role']) {
+            case '1':
+                $redirectUrl = '/dashboardAdmin';
+                break;
+            case '2':
+                $redirectUrl = '/dashboardTeam';
+                break;
+            case '3':
+                $redirectUrl = '/dashboardReferee';
+                break;
+            default:
+                $redirectUrl = '/dashboardUser';
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Вхід успішний',
+            'redirect' => $redirectUrl,
+        ]);
     }
 }

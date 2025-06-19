@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Повідомлення ---
   const registerMessage = document.getElementById("message");
   const confirmMessage = document.getElementById("message-confirm");
+  const loginMessage = document.getElementById("message-login");
 
   // --- Форма підтвердження паролю ---
   const confirmForm = document.getElementById("confirm-form");
@@ -23,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const passwordInput1 = document.getElementById("confirm-password");
   const passwordInput2 = document.getElementById("confirm-password2");
   const confirmTokenInput = document.getElementById("confirm-token");
+  const roleID = document.getElementById("role_id");
 
   // Відкриття модалки
   if (openModalBtn) {
@@ -41,20 +43,20 @@ document.addEventListener("DOMContentLoaded", () => {
   // Закриття при кліку поза модалкою
   let isDragging = false;
 
-    modal.addEventListener("mousedown", () => {
+  modal.addEventListener("mousedown", () => {
     isDragging = false;
-    });
+  });
 
-    modal.addEventListener("mousemove", () => {
+  modal.addEventListener("mousemove", () => {
     isDragging = true;
-    });
+  });
 
-    modal.addEventListener("mouseup", (e) => {
+  modal.addEventListener("mouseup", (e) => {
     // Якщо курсор був перетягнутий (тобто відбувалось виділення), то не закриваємо
     if (!isDragging && e.target === modal) {
-        modal.style.display = "none";
+      modal.style.display = "none";
     }
-    });
+  });
 
   // Переключення між логіном і реєстрацією
   if (switchToRegister && switchToLogin && loginForm && registerForm) {
@@ -75,11 +77,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (loginFormElement) {
     loginFormElement.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("login-email").value;
-      const password = document.getElementById("login-password").value;
+      const emailInput = document.getElementById("login-email");
+      const passwordInput = document.getElementById("login-password");
+      const email = emailInput.value;
+      const password = passwordInput.value;
 
       try {
-        const response = await fetch("/auth/login", {
+        const response = await fetch("/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
@@ -87,7 +91,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const result = await response.json();
         console.log(result);
-        // TODO: Реальна обробка результату
+
+        if (result.status === "success") {
+          emailInput.value = "";
+          passwordInput.value = "";
+
+          if (loginMessage) {
+            loginMessage.style.display = "block";
+            loginMessage.textContent = result.message;
+            loginMessage.style.color = "green";
+          }
+
+          if (result.redirect) {
+            window.location.href = result.redirect;
+          }
+        } else if (loginMessage) {
+          loginMessage.style.display = "block";
+          loginMessage.textContent = result.message;
+          loginMessage.style.color = "red";
+        }
       } catch (err) {
         console.error("Ошибка при логине:", err);
       }
@@ -112,18 +134,20 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(result);
 
         if (result.status === "success") {
+          registerFormElement.reset();
+          const registerForm = document.getElementById("register-form");
+          const descRegisterForm =
+            document.getElementById("desc-register-form");
           registerForm.style.display = "none";
-          const descRegister = document.getElementById("desc-register-form");
-          if (descRegister) descRegister.style.display = "none";
-
+          descRegisterForm.style.display = "none";
           if (registerMessage) {
             registerMessage.style.display = "block";
-            registerMessage.innerHTML = result.message;
+            registerMessage.textContent = result.message;
             registerMessage.style.color = "green";
           }
         } else if (registerMessage) {
           registerMessage.style.display = "block";
-          registerMessage.innerHTML = result.message;
+          registerMessage.textContent = result.message;
           registerMessage.style.color = "red";
         }
       } catch (err) {
@@ -142,7 +166,8 @@ document.addEventListener("DOMContentLoaded", () => {
     confirmForm &&
     passwordInput1 &&
     passwordInput2 &&
-    confirmTokenInput
+    confirmTokenInput &&
+    roleID
   ) {
     // Ховаємо інші форми
     if (loginForm) loginForm.style.display = "none";
@@ -181,6 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const pass1 = passwordInput1.value;
       const pass2 = passwordInput2.value;
       const tokenValue = confirmTokenInput.value;
+      const roleId = roleID.value;
 
       confirmMessage.style.display = "block";
 
@@ -203,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
             first_name: firstName,
             last_name: lastName,
             nick_name: nickName,
+            role_id: roleId,
           }),
         });
 
@@ -231,13 +258,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //Закрытие модального окна с ошибкой
   const closeError = document.getElementById("closeErrorModal");
-    if (closeError) {
-        closeError.addEventListener("click", function () {
-            const overlay = document.querySelector(".error-modal-overlay");
-            if (overlay) {
-                overlay.style.display = "none";
-                window.location.href = '/';
-            }
-        });
-    }
+  if (closeError) {
+    closeError.addEventListener("click", function () {
+      const overlay = document.querySelector(".error-modal-overlay");
+      if (overlay) {
+        overlay.style.display = "none";
+        window.location.href = "/";
+      }
+    });
+  }
 });

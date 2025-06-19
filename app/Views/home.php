@@ -81,7 +81,9 @@ switch ($status) {
                 <!-- Форма логина -->
                 <div id="div-login-form">
                     <h2>Логин</h2>
-                    <form action="/auth/login" method="POST">
+                    <div id="message-login" style="display: none;" class="form-message error"></div>
+                    <form action="/login" method="POST">
+                        <input type="hidden" id="loginForm" name="action" value="login">
                         <label for="login-email">Email</label>
                         <input type="email" id="login-email" placeholder="Введите ваш email" required>
                         <label for="login-password">Пароль</label>
@@ -106,23 +108,60 @@ switch ($status) {
 
                 <div id="div-confirm-form" style="display: none;">
                     <h2 style="padding-bottom: 20px;">Завершение регистрации</h2>
-                    <div id="message-confirm" style="display: none; color: red;"></div>
+                    <div id="message-confirm" style="display: none;" class="form-message error"></div>
 
-                    <form method="POST" id="confirm-form">
+                    <form method="POST" id="confirm-form" class="styled-form">
                         <input type="hidden" id="confirm-token" name="token" value="">
-                        <label for="confirm-first-name">Прізвище (латиницей):</label>
-                        <input type="text" id="confirm-first-name" name="first_name" pattern="[A-Za-z]+" required>
-                        <label for="confirm-last-name">Ім'я (латиницей):</label>
-                        <input type="text" id="confirm-last-name" name="last_name" pattern="[A-Za-z]+" required>
-                        <label for="confirm-nick-name">Nickname:</label>
-                        <input type="text" id="confirm-nick-name" name="nick_name">
-                        <label for="confirm-password">Введите ваш пароль:</label>
-                        <input type="password" id="confirm-password" name="password" required />
-                        <label for="confirm-password2">Повторите ваш пароль:</label>
-                        <input type="password" id="confirm-password2" name="password2" required>
-                        <button type="submit">Подтвердить</button>
+
+                        <div class="form-group">
+                            <div class="input-wrapper">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="confirm-first-name" name="first_name" placeholder="Прізвище (латиницей)" pattern="[A-Za-z]+" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-wrapper">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="confirm-last-name" name="last_name" placeholder="Ім'я (латиницей)" pattern="[A-Za-z]+" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-wrapper">
+                                <i class="fas fa-id-badge"></i>
+                                <input type="text" id="confirm-nick-name" name="nick_name" placeholder="Nickname">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="confirm-password" name="password" placeholder="Введите ваш пароль" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="confirm-password2" name="password2" placeholder="Повторите ваш пароль" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="role_id"><i class="fas fa-users"></i> Выберите роль:</label>
+                            <select name="role_id" id="role_id" required>
+                                <option value="4">Обычный пользователь</option>
+                                <option value="2">Представитель команды</option>
+                                <option value="3">Судья</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="form-button"><i class="fas fa-check-circle"></i> Подтвердить</button>
                     </form>
+
                 </div>
+
             </div>
         </div>
     </div>

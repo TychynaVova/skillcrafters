@@ -1,5 +1,6 @@
 # PHP
 /vendor/
+/logs/
 *.log
 *.cache
 *.tmp
