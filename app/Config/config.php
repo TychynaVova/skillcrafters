@@ -1,7 +1,7 @@
 <?php
 
 // Основной URL приложения
-define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/public');
+define('BASE_URL', 'https://' . $_SERVER['HTTP_HOST'] . '/');
 
 // Параметры базы данных
 define('DB_HOST', 'stahlbeton.ukrdns.net.in');

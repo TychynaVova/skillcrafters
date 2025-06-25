@@ -33,13 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Закриття модалки
-  if (closeModalBtn) {
-    closeModalBtn.addEventListener("click", () => {
-      modal.style.display = "none";
-    });
-  }
-
   // Закриття при кліку поза модалкою
   let isDragging = false;
 
@@ -90,7 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const result = await response.json();
-        console.log(result);
 
         if (result.status === "success") {
           emailInput.value = "";
@@ -131,7 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         const result = await response.json();
-        console.log(result);
 
         if (result.status === "success") {
           registerFormElement.reset();
@@ -266,5 +257,57 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "/";
       }
     });
+  }
+});
+
+document.addEventListener("click", (e) => {
+  if (e.target && e.target.id === "closeModal") {
+    modal.style.display = "none";
+    // Очистка форм
+    const loginForm = document.getElementById("div-login-form");
+    const registerForm = document.getElementById("div-register-form");
+    const loginFormElement = document.querySelector("#div-login-form form");
+    const registerFormElement = document.querySelector(
+      "#div-register-form form"
+    );
+    const confirmForm = document.getElementById("confirm-form");
+    const registerMessage = document.getElementById("message");
+    const confirmMessage = document.getElementById("message-confirm");
+    const loginMessage = document.getElementById("message-login");
+
+    if (loginFormElement) {
+      loginFormElement.reset();
+    }
+    if (registerFormElement) {
+      registerFormElement.reset();
+    }
+    if (confirmForm) {
+      confirmForm.reset();
+    } else {
+      console.warn("Confirm form не знайдено");
+    }
+    // Ховаємо повідомлення
+    [registerMessage, confirmMessage, loginMessage].forEach((msg, i) => {
+      msg.style.display = "none";
+      msg.textContent = "";
+    });
+    // Початковий стан блоків
+    const registerFormBlock = document.getElementById("register-form");
+    const descRegisterForm = document.getElementById("desc-register-form");
+
+    if (registerFormBlock) {
+      registerFormBlock.style.display = "none";
+    }
+    if (descRegisterForm) {
+      descRegisterForm.style.display = "block";
+    }
+    if (loginForm) {
+      loginForm.style.display = "block";
+    }
+    if (registerForm) {
+      registerForm.style.display = "none";
+    }
+    // Ховаємо модалку
+    modal.style.display = "none";
   }
 });

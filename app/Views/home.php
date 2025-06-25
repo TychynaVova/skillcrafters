@@ -109,7 +109,6 @@ switch ($status) {
                 <div id="div-confirm-form" style="display: none;">
                     <h2 style="padding-bottom: 20px;">Завершение регистрации</h2>
                     <div id="message-confirm" style="display: none;" class="form-message error"></div>
-
                     <form method="POST" id="confirm-form" class="styled-form">
                         <input type="hidden" id="confirm-token" name="token" value="">
 

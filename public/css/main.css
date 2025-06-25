@@ -38,6 +38,7 @@ header {
     display: flex;
     gap: 20px;
     align-items: center;
+    cursor: pointer;
 }
 
 .icons .icon {
@@ -81,6 +82,7 @@ header {
     right: 10px;
     font-size: 30px;
     cursor: pointer;
+    user-select: none;
 }
 
 form {

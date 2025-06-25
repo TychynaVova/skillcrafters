@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Models\User;
 use App\Models\EmailVerificationToken;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class RegisterController extends Controller
 {
@@ -65,47 +67,52 @@ class RegisterController extends Controller
     {
         $confirmationLink = BASE_URL . "confirm?token=" . urlencode($token);
         $templatePath = __DIR__ . '/../../public/emails/email_template.html';
+        $imgLink = BASE_URL . 'public/img/logo_black.png';
 
         if (!file_exists($templatePath)) {
             error_log("Email template not found: $templatePath");
             return false;
         }
 
-        // Загружаем HTML-шаблон и вставляем ссылку
         $htmlTemplate = file_get_contents($templatePath);
-        $htmlMessage = str_replace('{{CONFIRMATION_LINK}}', $confirmationLink, $htmlTemplate);
+        $htmlMessage = str_replace(
+            ['{{CONFIRMATION_LINK}}', '{{LOGO_LINK}}'],  // що замінюємо
+            [$confirmationLink, $imgLink],                 // на що замінюємо
+            $htmlTemplate
+        );
 
-        // Преобразуем переносы строк (важно для Windows sendmail)
-        $htmlMessage = str_replace("\n.", "\n..", $htmlMessage);
+        $mail = new PHPMailer(true);
 
-        // Заголовки письма
-        $from = 'no-reply@skillcrafters.loc';
-        $fromName = 'Skillcrafters';
+        try {
+            // Настройки SMTP
+            $mail->isSMTP();
+            $mail->Host = 'mail.skillcrafters2.tychina.kiev.ua';          // <-- замените на ваш SMTP
+            $mail->SMTPAuth = true;
+            $mail->Username = 'notifications@skillcrafters2.tychina.kiev.ua';  // <-- логин SMTP
+            $mail->Password = 'jR8hT7gM5y';              // <-- пароль SMTP
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Или PHPMailer::ENCRYPTION_STARTTLS
+            $mail->Port = 465; // Или 587 (в зависимости от SSL/TLS)
 
-        $subject = 'Подтверждение регистрации на Skillcrafters';
-        $encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+            // От кого
+            $mail->setFrom('notifications@skillcrafters2.tychina.kiev.ua', 'Skillcrafters');
+            $mail->addReplyTo('notifications@skillcrafters2.tychina.kiev.ua', 'Skillcrafters');
 
-        $headers = [
-            'MIME-Version: 1.0',
-            'Content-Type: text/html; charset=UTF-8',
-            'From: ' . sprintf('%s <%s>', $fromName, $from),
-            'Reply-To: ' . $from,
-            'X-Mailer: PHP/' . phpversion(),
-        ];
+            // Кому
+            $mail->addAddress($email);
 
-        $headersString = implode("\r\n", $headers);
+            // Контент
+            $mail->isHTML(true);
+            $mail->CharSet = 'UTF-8';
+            $mail->Encoding = 'base64';
+            $mail->Subject = 'Подтверждение регистрации на Skillcrafters';
+            $mail->Body = $htmlMessage;
 
-        // Некоторые серверы требуют четко указанный envelope sender через параметр -f
-        $additionalParams = '-f ' . escapeshellarg($from);
-
-        // Отправка
-        $success = mail($email, $encodedSubject, $htmlMessage, $headersString, $additionalParams);
-
-        if (!$success) {
-            error_log("mail() failed to send confirmation email to $email");
+            // Отправка
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            error_log("PHPMailer error: {$mail->ErrorInfo}");
             return false;
         }
-
-        return true;
     }
 }
