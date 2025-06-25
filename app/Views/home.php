@@ -34,7 +34,7 @@ switch ($status) {
 
     <header>
         <div class="logo">
-            SkillCrafters
+            <img src="/public/img/logo_black.svg" alt="Header Logo" width="300" height="50">
         </div>
         <nav class="menu">
             <a href="#section1">Секция 1</a>
