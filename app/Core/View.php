@@ -17,5 +17,11 @@ class View {
             throw new Exception("View not found: " . $viewPath);
         }
     }
+
+    public function renderPartial(string $view, array $data = []): void
+    {
+        extract($data);
+        require __DIR__ . '/../Views/' . $view . '.php';
+    }
 }
 

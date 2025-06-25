@@ -19,19 +19,14 @@ class User
     /**
      * Поиск пользователя по ID
      */
-    public static function find(int $id): ?self
+    public static function find(int $id): ?array
     {
-        $user = new self();
-        $stmt = $user->db->prepare("SELECT * FROM users WHERE id = ?");
+        $db = (new self())->db;
+        $stmt = $db->prepare("SELECT * FROM users WHERE id = ?");
         $stmt->execute([$id]);
 
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$data) {
-            return null;
-        }
-
-        $user->data = $data;
-        return $user;
+        return $data ?: null;
     }
 
     /**
@@ -72,6 +67,16 @@ class User
 
     // ==== Геттеры и утилиты ====
 
+    public function __get($name)
+    {
+        return $this->data[$name] ?? null;
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+    
     public function getId(): ?int
     {
         return $this->data['id'] ?? null;

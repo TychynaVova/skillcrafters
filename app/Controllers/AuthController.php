@@ -111,4 +111,13 @@ class AuthController extends Controller
             'redirect' => $redirectUrl,
         ]);
     }
+
+    public function logout() {
+        $_SESSION = [];
+        session_unset();
+        session_destroy();
+
+        echo json_encode(['success' => true]);
+        exit;
+    }
 }

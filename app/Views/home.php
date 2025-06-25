@@ -151,8 +151,8 @@ switch ($status) {
                             <label for="role_id"><i class="fas fa-users"></i> Выберите роль:</label>
                             <select name="role_id" id="role_id" required>
                                 <option value="4">Обычный пользователь</option>
-                                <option value="2">Представитель команды</option>
-                                <option value="3">Судья</option>
+                                <option value="2">Тест</option>
+                                <option value="3">Ментор</option>
                             </select>
                         </div>
 

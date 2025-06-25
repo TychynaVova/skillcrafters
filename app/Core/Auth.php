@@ -18,12 +18,23 @@ class Auth
         return self::user() !== null;
     }
 
-    public static function requireRole(int|array $allowedRoles): void {
-        $user = self::user();
+    public static function requireRole($requiredRole)
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-        if (!$user || !in_array($user->getRoleId(), (array)$allowedRoles, true)) {
-            http_response_code(403);
-            exit('Access denied');
+        if (!isset($_SESSION['role'])) {
+            header('HTTP/1.1 403 Forbidden');
+            echo 'Access denied: Not logged in.';
+            exit;
+        }
+
+        // Зробимо гнучке порівняння
+        if ($_SESSION['role'] != $requiredRole) {
+            header('HTTP/1.1 403 Forbidden');
+            echo 'Access denied: Insufficient permissions.';
+            exit;
         }
     }
 

@@ -27,15 +27,23 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// Ініціалізація роутера
+
 $router = new Router();
+
+// Ініціалізація роутера
 $router->get('/', 'HomeController@index');
+$router->post('/login', 'AuthController@login');
+//$router->post('/logout', 'AuthController@logout');
 $router->post('/register', 'RegisterController@registerUser');
 $router->get('/confirm', 'ConfirmController@confirmEmail');
 $router->post('/confirmRegister', 'ConfirmController@addUser');
 $router->get('/dashboardUser', 'HomeController@dashboardUser');
-$router->get('/dashboardAdmin', 'HomeController@dashboardAdmin');
-$router->post('/login', 'AuthController@login');
+
+//Admin rout
+$router->get('/dashboardAdmin', 'AdminController@dashboard');
+$router->get('/admin/load', 'AdminController@loadContent');
+
+
 
 // Обробка запиту
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

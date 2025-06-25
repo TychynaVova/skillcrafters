@@ -7,7 +7,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Logger\\": "src/Logger/"
+            "Logger\\": "src/Logger/",
+            "App\\": "app/",
+            "Core\\": "app/Core/"
         }
     },
     "minimum-stability": "stable",
