@@ -25,8 +25,9 @@ class Auth
         }
 
         if (!isset($_SESSION['role'])) {
-            header('HTTP/1.1 403 Forbidden');
-            echo 'Access denied: Not logged in.';
+            session_start();
+            $_SESSION['flash_message'] = 'Доступ заборонено: Ви не увійшли в систему.';
+            header('Location: /');
             exit;
         }
 

@@ -86,7 +86,8 @@ class AuthController extends Controller
         $this->logger->info("Користувач увійшов успішно", [
             'id'    => $user->getId(),
             'email' => $user->getEmail(),
-            'role'  => $user->getRoleId()
+            'role'  => $user->getRoleId(),
+            'session' => var_export($_SESSION, true)
         ]);
 
         // Роутинг залежно від ролі
@@ -112,11 +113,24 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout() {
+    public function logout()
+    {
+        session_start();
+        $userId = $_SESSION['user_id'] ?? null;
+        $email = $_SESSION['email'] ?? null;
+        $role = $_SESSION['role'] ?? null;
+
+        $this->logger->info("Користувач вийшов з системи", [
+            'id'    => $userId,
+            'email' => $email,
+            'role'  => $role,
+            'session' => var_export($_SESSION, true)
+        ]);
         $_SESSION = [];
         session_unset();
         session_destroy();
 
+        // Повертаємо json-відповідь (для JS)
         echo json_encode(['success' => true]);
         exit;
     }

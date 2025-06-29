@@ -33,6 +33,7 @@ $router = new Router();
 // Ініціалізація роутера
 $router->get('/', 'HomeController@index');
 $router->post('/login', 'AuthController@login');
+$router->post('/logout', 'AuthController@logout');
 //$router->post('/logout', 'AuthController@logout');
 $router->post('/register', 'RegisterController@registerUser');
 $router->get('/confirm', 'ConfirmController@confirmEmail');
