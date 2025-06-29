@@ -7,39 +7,42 @@ function logout() {
 
 // Ініціалізація фільтрів в таблиці користувачів
 function initUserTableFilters() {
-  const filterInputs = document.querySelectorAll('.filter-input');
-  const dataRows = document.querySelectorAll('.user-grid .user-grid-row:not(.user-grid-header):not(.user-grid-filter)');
+  const filterInputs = document.querySelectorAll(".filter-input");
+  const dataRows = document.querySelectorAll(
+    ".user-grid .user-grid-row:not(.user-grid-header):not(.user-grid-filter)"
+  );
 
   if (!filterInputs.length || !dataRows.length) return;
 
-  filterInputs.forEach(input => {
-    input.addEventListener('input', () => {
-      const filters = Array.from(filterInputs).map(filter => ({
+  filterInputs.forEach((input) => {
+    input.addEventListener("input", () => {
+      const filters = Array.from(filterInputs).map((filter) => ({
         index: parseInt(filter.dataset.col, 10),
-        value: filter.value.trim().toLowerCase()
+        value: filter.value.trim().toLowerCase(),
       }));
 
-      dataRows.forEach(row => {
-        const cells = row.querySelectorAll('div');
+      dataRows.forEach((row) => {
+        const cells = row.querySelectorAll("div");
         let visible = true;
 
-        filters.forEach(filter => {
+        filters.forEach((filter) => {
           const cell = cells[filter.index];
           if (!cell || !cell.textContent.toLowerCase().includes(filter.value)) {
             visible = false;
           }
         });
 
-        row.style.display = visible ? '' : 'none';
+        row.style.display = visible ? "" : "none";
       });
     });
   });
 }
 
 // Делегування кліків по .nav-link і .action-icons a
-document.addEventListener('click', function(e) {
-  const navLink = e.target.closest('.nav-link');
-  const editLink = e.target.closest('.action-icons a');
+document.addEventListener("click", function (e) {
+  const navLink = e.target.closest(".nav-link");
+  const editLink = e.target.closest(".action-icons a");
+  const btn = e.target.closest('#updateUser');
 
   // Обробка навігаційних лінків з data-action
   if (navLink && navLink.dataset.action) {
@@ -48,17 +51,17 @@ document.addEventListener('click', function(e) {
     const action = navLink.dataset.action;
 
     fetch(`/admin/load?action=${action}`)
-      .then(res => res.text())
-      .then(html => {
-        const mainArea = document.querySelector('.main-area');
+      .then((res) => res.text())
+      .then((html) => {
+        const mainArea = document.querySelector(".main-area");
         if (mainArea) {
           mainArea.innerHTML = html;
-          if (action === 'users') {
+          if (action === "users") {
             initUserTableFilters();
           }
         }
       })
-      .catch(err => console.error('Помилка завантаження:', err));
+      .catch((err) => console.error("Помилка завантаження:", err));
     return;
   }
 
@@ -67,14 +70,33 @@ document.addEventListener('click', function(e) {
     e.preventDefault();
 
     fetch(editLink.href)
-      .then(res => res.text())
-      .then(html => {
-        const mainArea = document.querySelector('.main-area');
+      .then((res) => res.text())
+      .then((html) => {
+        const mainArea = document.querySelector(".main-area");
         if (mainArea) mainArea.innerHTML = html;
       })
       .catch(console.error);
   }
+
+  if (btn) {
+    e.preventDefault();
+    const form = btn.closest('form');
+    const formData = new FormData(form);
+    fetch("/admin/update?action=updateUser", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.text())
+      .then((html) => {
+        const mainArea = document.querySelector(".main-area");
+        if (mainArea) {
+          mainArea.innerHTML = html;
+          initUserTableFilters(); 
+        }
+      })
+      .catch((err) => console.error("Помилка оновлення:", err));
+  }
 });
 
-// Початкова ініціалізація (наприклад, для фільтрів якщо одразу показані юзери)
+
 initUserTableFilters();

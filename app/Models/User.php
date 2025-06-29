@@ -65,6 +65,32 @@ class User
         return $stmt->execute([$email, password_hash($password, PASSWORD_DEFAULT)]);
     }
 
+    public function update(int $id, array $data): bool
+    {
+        $sql = "UPDATE users SET 
+            first_name = :first_name,
+            last_name = :last_name,
+            nick_name = :nick_name,
+            email = :email,
+            role_id = :role_id,
+            status = :status,
+            blocked_reason = :blocked_reason,
+            updated_at = NOW()
+        WHERE id = :id";
+
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            ':first_name' => $data['first_name'],
+            ':last_name' => $data['last_name'],
+            ':nick_name' => $data['nick_name'],
+            ':email' => $data['email'],
+            ':role_id' => $data['role_id'],
+            ':status' => $data['status'],
+            ':blocked_reason' => $data['blocked_reason'],
+            ':id' => $id
+        ]);
+    }
+
     // ==== Геттеры и утилиты ====
 
     public function __get($name)

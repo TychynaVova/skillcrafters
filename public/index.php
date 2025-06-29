@@ -42,6 +42,7 @@ $router->get('/dashboardUser', 'HomeController@dashboardUser');
 //Admin rout
 $router->get('/dashboardAdmin', 'AdminController@dashboard');
 $router->get('/admin/load', 'AdminController@loadContent');
+$router->post('/admin/update', 'AdminController@updateUser');
 
 
 

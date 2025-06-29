@@ -1,6 +1,6 @@
 <h1>Редагування користувача #<?= htmlspecialchars($user['id']) ?></h1>
 
-<form method="POST" action="/user/update" class="user-edit-form">
+<form id="userEditForm" data-action="updateUser" class="user-edit-form">
     <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>" />
 
     <div class="form-group">
@@ -28,7 +28,7 @@
         <select id="role_id" name="role_id" required>
             <option value="1" <?= $user['role_id'] == '1' ? 'selected' : '' ?>>Адмін</option>
             <option value="2" <?= $user['role_id'] == '2' ? 'selected' : '' ?>>Модератор</option>
-            <option value="3" <?= $user['role_id'] == '3' ? 'selected' : '' ?>>Користувач</option>
+            <option value="4" <?= $user['role_id'] == '4' ? 'selected' : '' ?>>Користувач</option>
             <!-- Додай інші ролі, якщо потрібно -->
         </select>
     </div>
@@ -47,7 +47,7 @@
     </div>
 
     <div class="form-buttons">
-        <button type="submit" class="btn btn-primary">Зберегти</button>
+        <button type="submit" class="btn btn-primary" id="updateUser" data-action="update">Зберегти</button>
         <a href="/admin/load?action=users" class="nav-link btn btn-secondary" data-action="users">
             <span class="link_name">Повернутися до списку</span>
         </a>
