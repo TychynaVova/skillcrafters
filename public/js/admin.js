@@ -42,7 +42,8 @@ function initUserTableFilters() {
 document.addEventListener("click", function (e) {
   const navLink = e.target.closest(".nav-link");
   const editLink = e.target.closest(".action-icons a");
-  const btn = e.target.closest('#updateUser');
+  const btnUser = e.target.closest('#updateUser');
+  const btnCourse = e.target.closest('#updateCourse');
 
   // Обробка навігаційних лінків з data-action
   if (navLink && navLink.dataset.action) {
@@ -78,11 +79,30 @@ document.addEventListener("click", function (e) {
       .catch(console.error);
   }
 
-  if (btn) {
+  if (btnUser) {
     e.preventDefault();
     const form = btn.closest('form');
     const formData = new FormData(form);
     fetch("/admin/update?action=updateUser", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.text())
+      .then((html) => {
+        const mainArea = document.querySelector(".main-area");
+        if (mainArea) {
+          mainArea.innerHTML = html;
+          initUserTableFilters(); 
+        }
+      })
+      .catch((err) => console.error("Помилка оновлення:", err));
+  }
+
+  if (btnCourse) {
+    e.preventDefault();
+    const form = btnCourse.closest('form');
+    const formData = new FormData(form);
+    fetch("/admin/update?action=updateCourse", {
       method: "POST",
       body: formData,
     })

@@ -23,6 +23,10 @@
                         <i class="fas fa-users"></i>
                         <span class="link_name">Користувачі</span>
                     </a>
+                    <a href="?action=courses" class="nav-link" data-action="courses">
+                        <i class="fas fa-book-open"></i>
+                        <span class="link_name">Курси</span>
+                    </a>
                     <span class="tooltip">Користувачі</span>
                 </li>
                 <!-- Додаткові пункти можна додати пізніше -->
