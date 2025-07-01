@@ -22,7 +22,7 @@
         <label for="image">Зображення (jpg/png)</label>
         <?php if (!empty($course['image'])): ?>
             <div class="course-image-preview">
-                <img src="/uploads/courses/<?= htmlspecialchars($course['image']) ?>" alt="Зображення курсу" style="max-width: 200px;">
+                <img src="/public<?= htmlspecialchars($course['image']) ?>" alt="Зображення курсу" style="max-width: 200px;">
             </div>
         <?php endif; ?>
         <input type="file" name="image" id="image">

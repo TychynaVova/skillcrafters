@@ -38,12 +38,16 @@ function initUserTableFilters() {
   });
 }
 
-// Делегування кліків по .nav-link і .action-icons a
 document.addEventListener("click", function (e) {
   const navLink = e.target.closest(".nav-link");
   const editLink = e.target.closest(".action-icons a");
-  const btnUser = e.target.closest('#updateUser');
-  const btnCourse = e.target.closest('#updateCourse');
+  const btnUser = e.target.closest("#updateUser");
+  const btnCourse = e.target.closest("#updateCourse");
+  const btnCreateCourse = e.target.closest(".toolbar a");
+  const btnSaveCourse = e.target.closest("#saveCourse");
+  const actionBtn = e.target.closest(".modules-header a");
+  const toggleBtn = e.target.closest(".fa-chevron-down");
+  const paginationBtn = e.target.closest(".pagination a");
 
   // Обробка навігаційних лінків з data-action
   if (navLink && navLink.dataset.action) {
@@ -66,7 +70,18 @@ document.addEventListener("click", function (e) {
     return;
   }
 
-  // Обробка переходу на сторінку редагування
+  if (btnCreateCourse) {
+    e.preventDefault();
+
+    fetch(btnCreateCourse.href)
+      .then((res) => res.text())
+      .then((html) => {
+        const mainArea = document.querySelector(".main-area");
+        if (mainArea) mainArea.innerHTML = html;
+      })
+      .catch(console.error);
+  }
+
   if (editLink) {
     e.preventDefault();
 
@@ -81,7 +96,7 @@ document.addEventListener("click", function (e) {
 
   if (btnUser) {
     e.preventDefault();
-    const form = btn.closest('form');
+    const form = btn.closest("form");
     const formData = new FormData(form);
     fetch("/admin/update?action=updateUser", {
       method: "POST",
@@ -92,7 +107,7 @@ document.addEventListener("click", function (e) {
         const mainArea = document.querySelector(".main-area");
         if (mainArea) {
           mainArea.innerHTML = html;
-          initUserTableFilters(); 
+          initUserTableFilters();
         }
       })
       .catch((err) => console.error("Помилка оновлення:", err));
@@ -100,7 +115,7 @@ document.addEventListener("click", function (e) {
 
   if (btnCourse) {
     e.preventDefault();
-    const form = btnCourse.closest('form');
+    const form = btnCourse.closest("form");
     const formData = new FormData(form);
     fetch("/admin/update?action=updateCourse", {
       method: "POST",
@@ -111,12 +126,65 @@ document.addEventListener("click", function (e) {
         const mainArea = document.querySelector(".main-area");
         if (mainArea) {
           mainArea.innerHTML = html;
-          initUserTableFilters(); 
+          initUserTableFilters();
         }
       })
       .catch((err) => console.error("Помилка оновлення:", err));
   }
-});
 
+  if (btnSaveCourse) {
+    e.preventDefault();
+    const form = btnSaveCourse.closest("form");
+    const formData = new FormData(form);
+    fetch("/admin/update?action=saveNewCourse", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.text())
+      .then((html) => {
+        const mainArea = document.querySelector(".main-area");
+        if (mainArea) {
+          mainArea.innerHTML = html;
+        }
+      })
+      .catch((err) => console.error("Помилка створення курсу:", err));
+  }
+
+  if (actionBtn) {
+    e.preventDefault();
+
+    fetch(actionBtn.href)
+      .then((res) => res.text())
+      .then((html) => {
+        const mainArea = document.querySelector(".main-area");
+        if (mainArea) mainArea.innerHTML = html;
+      })
+      .catch(console.error);
+  }
+
+  if(toggleBtn) {
+    e.preventDefault();
+    const card = toggleBtn.closest(".module-card");
+    const isActive = card.classList.contains("active");
+    document.querySelectorAll(".module-card.active").forEach((openCard) => {
+      if (openCard !== card) {
+        openCard.classList.remove("active");
+      }
+    });
+    card.classList.toggle("active");
+  }
+
+  if (paginationBtn) {
+    e.preventDefault();
+
+    fetch(paginationBtn.href)
+      .then((res) => res.text())
+      .then((html) => {
+        const mainArea = document.querySelector(".main-area");
+        if (mainArea) mainArea.innerHTML = html;
+      })
+      .catch(console.error);
+  }
+});
 
 initUserTableFilters();

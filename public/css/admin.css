@@ -13,7 +13,7 @@ body {
   background: #f4f4f4;
   padding: 10px;
   position: absolute;
-  height: auto;
+  height: 100%;
   width: calc(100% - 220px);
   margin-left: 220px;
   transition: all 0.3s ease;
@@ -209,18 +209,21 @@ body {
 }
 
 .user-edit-form,
-.course-edit-form {
+.course-edit-form,
+.course-add-form {
     max-width: 500px;
     font-family: Arial, sans-serif;
 }
 
 .user-edit-form .form-group,
-.course-edit-form .form-group {
+.course-edit-form .form-group,
+.course-add-form .form-group {
     margin-bottom: 1rem;
 }
 
 .user-edit-form label,
-.course-edit-form label {
+.course-edit-form label,
+.course-add-form label {
     display: block;
     font-weight: 600;
     margin-bottom: 0.25rem;
@@ -234,7 +237,11 @@ body {
 .course-edit-form input[type="text"],
 .course-edit-form input[type="email"],
 .course-edit-form select,
-.course-edit-form textarea {
+.course-edit-form textarea,
+.course-add-form input[type="text"],
+.course-add-form input[type="email"],
+.course-add-form select,
+.course-add-form textarea {
     width: 100%;
     padding: 0.5rem 0.75rem;
     border: 1px solid #ccc;
@@ -251,7 +258,11 @@ body {
 .course-edit-form input[type="text"]:focus,
 .course-edit-form input[type="email"]:focus,
 .course-edit-form select:focus,
-.course-edit-form textarea:focus {
+.course-edit-form textarea:focus,
+.course-add-form input[type="text"]:focus,
+.course-add-form input[type="email"]:focus,
+.course-add-form select:focus,
+.course-add-form textarea:focus {
     border-color: #007bff;
     outline: none;
 }
@@ -295,6 +306,24 @@ i.disabled {
   opacity: 0.5;
   pointer-events: none;
   cursor: not-allowed;
+}
+.toolbar {
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.btn.btn-success {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn.btn-success i {
+    margin-right: 5px;
 }
 
 

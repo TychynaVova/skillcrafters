@@ -53,7 +53,7 @@ class Courses
             ':title' => $data['title'],
             ':slug' => $data['slug'],
             ':description' => $data['description'],
-            ':image' => $data['image'],
+            'image' => $data['image'] ?? null,
             ':status' => $data['status'],
             ':price' => $data['price'],
             ':is_featured' => $data['is_featured'],
@@ -62,6 +62,18 @@ class Courses
             ':language' => $data['language'],
             ':id' => $id
         ]);
+    }
+
+    public function create(array $data): bool
+    {
+        $sql = "INSERT INTO courses 
+        (title, slug, description, status, price, is_featured, level, duration, language, image) 
+        VALUES 
+        (:title, :slug, :description, :status, :price, :is_featured, :level, :duration, :language, :image)";
+
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($data) ? $this->db->lastInsertId() : false;
+
     }
 
 }

@@ -7,6 +7,10 @@ use Core\Auth;
 use App\Core\Controller;
 use App\Models\User;
 use App\Models\Courses;
+use App\Models\Module;
+/* #TODO */
+use App\Models\Lesson;
+use App\Models\Quiz;
 
 class AdminController extends Controller
 {
@@ -64,6 +68,27 @@ class AdminController extends Controller
                 }
                 $this->view->renderPartial('admin/partials/edit_cours_form', ['course' => $course]);
                 break;
+            case 'createCourse':
+                $this->view->renderPartial('admin/partials/add_cours_form');
+                break;
+            /*case 'lessons':
+                $courseId = $_GET['id'];
+                $lessonModel = new Lesson();
+                $lessons = $lessonModel->getByCourseId($courseId);
+                $this->view->renderPartial('admin/lessons/list', ['lessons' => $lessons, 'courseId' => $courseId]);
+                break;
+            case 'quizzes':
+                $courseId = $_GET['id'];
+                $quizModel = new Quiz();
+                $quizzes = $quizModel->getByCourseId($courseId);
+                $this->view->renderPartial('admin/quizzes/list', ['quizzes' => $quizzes, 'courseId' => $courseId]);
+                break;
+            case 'quizOptions':
+                $courseId = $_GET['id'];
+                $quizModel = new Quiz();
+                $quizzes = $quizModel->getByCourseId($courseId);
+                $this->view->renderPartial('admin/quizzes/list', ['quizzes' => $quizzes, 'courseId' => $courseId]);
+                break;*/
         }
     }
 
@@ -100,7 +125,16 @@ class AdminController extends Controller
             case 'updateCourse':
                 $id = $_POST['id'];
 
-                $imagePath = null;
+                $courseModel = new Courses();
+                $existingCourse = $courseModel->find($id); // отримаємо старий запис
+
+                if (!$existingCourse) {
+                    echo 'Курс не знайдено';
+                    return;
+                }
+
+                $imagePath = $existingCourse['image'];
+
                 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                     $tmpName = $_FILES['image']['tmp_name'];
                     $name = basename($_FILES['image']['name']);
@@ -121,6 +155,7 @@ class AdminController extends Controller
                     'level' => $_POST['level'],
                     'duration' => $_POST['duration'],
                     'language' => $_POST['language'],
+                    'image' => $imagePath
                 ];
 
                 if ($imagePath !== null) {
@@ -138,6 +173,44 @@ class AdminController extends Controller
                 $_GET['action'] = 'courses';
                 $this->loadContent();
 
+                break;
+            case 'saveNewCourse':
+                $imagePath = null;
+
+                if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                    $tmpName = $_FILES['image']['tmp_name'];
+                    $name = basename($_FILES['image']['name']);
+                    $targetPath = __DIR__ . '/../../public/uploads/' . $name;
+
+                    if (move_uploaded_file($tmpName, $targetPath)) {
+                        $imagePath = '/uploads/' . $name;
+                    }
+                }
+
+                $fields = [
+                    'title' => $_POST['title'],
+                    'slug' => $_POST['slug'],
+                    'description' => $_POST['description'],
+                    'status' => $_POST['status'],
+                    'price' => $_POST['price'],
+                    'is_featured' => isset($_POST['is_featured']) ? 1 : 0,
+                    'level' => $_POST['level'],
+                    'duration' => $_POST['duration'],
+                    'language' => $_POST['language'],
+                    'image' => $imagePath,
+                ];
+
+                $courseModel = new Courses();
+                $newCourseId = $courseModel->create($fields);
+
+                if (!$newCourseId) {
+                    echo 'Помилка при створенні курсу';
+                    return;
+                }
+
+                // Після створення — повертаємось на список курсів
+                $_GET['action'] = 'courses';
+                $this->loadContent();
                 break;
         }
     }

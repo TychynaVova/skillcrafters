@@ -34,11 +34,16 @@ $router = new Router();
 $router->get('/', 'HomeController@index');
 $router->post('/login', 'AuthController@login');
 $router->post('/logout', 'AuthController@logout');
-//$router->post('/logout', 'AuthController@logout');
 $router->post('/register', 'RegisterController@registerUser');
 $router->get('/confirm', 'ConfirmController@confirmEmail');
 $router->post('/confirmRegister', 'ConfirmController@addUser');
 $router->get('/dashboardUser', 'HomeController@dashboardUser');
+
+// Роут для Модулів
+$router->get('/modules/list', 'ModulesController@listModules');
+$router->get('/modules/add', 'ModulesController@addModule');
+$router->post('/modules/edit', 'ModulesController@editModule');
+//$router->post('/modules/{id}/edit', 'ModulesController@editModule');
 
 //Admin rout
 $router->get('/dashboardAdmin', 'AdminController@dashboard');
