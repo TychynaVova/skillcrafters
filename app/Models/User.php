@@ -52,7 +52,7 @@ class User
      */
     public function getAllUsers(): array
     {
-        $stmt = $this->db->query('SELECT * FROM users');
+        $stmt = $this->db->query('SELECT id, first_name, last_name, nick_name, email, created_at, role_id, updated_at, status, blocked_reason FROM users');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

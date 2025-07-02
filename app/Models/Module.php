@@ -46,4 +46,37 @@ class Module
         ];
 
     }
+
+    public function createModule($data): bool {
+        $stmt = $this->db->prepare("
+            INSERT INTO modules (course_id, title, description, position) 
+            VALUES (:course_id, :title, :description, :position)
+        ");
+        return $stmt->execute([
+            ':course_id' => $data['course_id'],
+            ':title' => $data['title'],
+            ':description' => $data['description'],
+            ':position' => $data['position'] ?? 0
+        ]);
+    }
+
+    public function getNextPosition($courseId): mixed {
+        $stmt = $this->db->prepare("
+            SELECT MAX(position) + 1 
+            FROM modules 
+            WHERE course_id = ?
+        ");
+        $stmt->execute([$courseId]);
+        return $stmt->fetchColumn() ?? 1;
+    }
+
+    public static function find(int $id): ?array
+    {
+        $db = (new self())->db;
+        $stmt = $db->prepare("SELECT * FROM modules WHERE id = ?");
+        $stmt->execute([$id]);
+
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $data ?: null;
+    }
 }

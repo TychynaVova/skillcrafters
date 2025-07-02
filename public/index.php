@@ -39,11 +39,11 @@ $router->get('/confirm', 'ConfirmController@confirmEmail');
 $router->post('/confirmRegister', 'ConfirmController@addUser');
 $router->get('/dashboardUser', 'HomeController@dashboardUser');
 
-// Роут для Модулів
 $router->get('/modules/list', 'ModulesController@listModules');
 $router->get('/modules/add', 'ModulesController@addModule');
-$router->post('/modules/edit', 'ModulesController@editModule');
-//$router->post('/modules/{id}/edit', 'ModulesController@editModule');
+$router->post('/modules/new', 'ModulesController@newModule');
+$router->get('/modules/edit', 'ModulesController@editModule');
+$router->post('/modules/update', 'ModulesController@updateModule');
 
 //Admin rout
 $router->get('/dashboardAdmin', 'AdminController@dashboard');

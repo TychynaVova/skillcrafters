@@ -6,7 +6,7 @@ $isAdmin = $isAdmin ?? false;
 ?>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<h1>Модулі</h1>
+<h2>Модулі</h2>
 <div class="modules-container">
     <div class="modules-header">
         <a href="/admin/load?action=courses" class="btn btn-back">
@@ -24,11 +24,11 @@ $isAdmin = $isAdmin ?? false;
                 <div class="module-card">
                     <div class="module-card-header">
                         <h3><?= htmlspecialchars($module['title']) ?></h3>
-                        <div class="module-actions">
+                        <div class="module-actions action-icons">
                             <i class="module-toggle fas fa-chevron-down"></i>
                             <?php if ($isAdmin): ?>
-                                <a href="/courses/<?= $courseId ?>/modules/<?= $module['id'] ?>/edit" 
-                                   class="module-edit">
+                                <a href="/modules/edit?id=<?= $courseId ?>&mod=<?= $module['id'] ?>" 
+                                   class="module-edit" data-action="edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             <?php endif; ?>
@@ -54,11 +54,6 @@ $isAdmin = $isAdmin ?? false;
     <?php else: ?>
         <div class="empty-state">
             <p>Цей курс ще не має модулів.</p>
-            <?php if ($isAdmin): ?>
-                <a href="/courses/<?= $courseId ?>/modules/new" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Додати перший модуль
-                </a>
-            <?php endif; ?>
         </div>
     <?php endif; ?>
 </div>

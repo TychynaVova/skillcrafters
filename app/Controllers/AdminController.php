@@ -29,12 +29,14 @@ class AdminController extends Controller
         $action = $_GET['action'] ?? 'dashboard';
 
         switch ($action) {
+            case 'home':
+                $this->dashboard();
+                break;
             case 'users':
                 $userModel = new User();
                 $users = $userModel->getAllUsers();
                 $this->view->renderPartial('admin/partials/users', ['users' => $users]);
                 break;
-
             case 'editUser':
                 $id = $_GET['id'] ?? null;
                 if (!$id) {

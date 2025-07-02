@@ -96,7 +96,7 @@ document.addEventListener("click", function (e) {
 
   if (btnUser) {
     e.preventDefault();
-    const form = btn.closest("form");
+    const form = btnUser.closest("form");
     const formData = new FormData(form);
     fetch("/admin/update?action=updateUser", {
       method: "POST",

@@ -71,4 +71,7 @@
     <button type="submit" class="btn btn-primary" id="updateCourse" data-action="update">
         <i class="fas fa-save"></i> Зберегти курс
     </button>
+    <a href="/dashboardAdmin?action=courses" class="nav-link btn btn-secondary" data-action="courses">
+            <i class="fas fa-arrow-left"></i> До списку курсів
+    </a>
 </form>

@@ -10,10 +10,9 @@ body {
 }
 .content {
   flex: 1;
-  background: #f4f4f4;
+  /* background: #f4f4f4; */
   padding: 10px;
   position: absolute;
-  height: 100%;
   width: calc(100% - 220px);
   margin-left: 220px;
   transition: all 0.3s ease;
@@ -38,7 +37,7 @@ body {
   font-size: 18px;
 }
 .main-area {
-  margin-top: 20px;
+  margin: 0 20px;
 }
 .sidebar {
   position: fixed;
@@ -148,14 +147,16 @@ body {
 }
 
 .user-grid,
-.course-grid {
+.course-grid,
+.adminUser-grid {
     display: grid;
     row-gap: 8px;
     margin-top: 20px;
 }
 
 .user-grid-row,
-.course-grid-row {
+.course-grid-row,
+.adminUser-grid-row {
     display: grid;
     grid-template-columns: 35px 1fr 1fr 1fr 2fr 1fr 80px 120px;
     align-items: center;
@@ -169,8 +170,13 @@ body {
   grid-template-columns: 35px 3fr 1fr 1fr 120px;
 }
 
+.adminUser-grid-row {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
 .user-grid-header,
-.course-grid-header {
+.course-grid-header,
+.adminUser-grid-header {
     font-weight: bold;
     background-color: #f4f4f4;
     border-top: 2px solid #ddd;
@@ -200,6 +206,10 @@ body {
     color: #666;
 }
 
+.action-icons a {
+  text-decoration: none;
+}
+
 .action-icons i:hover {
     color: #007bff;
 }
@@ -210,20 +220,25 @@ body {
 
 .user-edit-form,
 .course-edit-form,
-.course-add-form {
+.course-add-form,
+.module-add-form,
+.module-edit-form {
     max-width: 500px;
     font-family: Arial, sans-serif;
 }
 
 .user-edit-form .form-group,
 .course-edit-form .form-group,
-.course-add-form .form-group {
+.course-add-form .form-group,
+.module-edit-form .form-group {
     margin-bottom: 1rem;
 }
 
 .user-edit-form label,
 .course-edit-form label,
-.course-add-form label {
+.course-add-form label,
+.module-add-form label,
+.module-edit-form label {
     display: block;
     font-weight: 600;
     margin-bottom: 0.25rem;
@@ -232,17 +247,26 @@ body {
 
 .user-edit-form input[type="text"],
 .user-edit-form input[type="email"],
+.user-edit-form input[type="number"],
 .user-edit-form select,
 .user-edit-form textarea,
 .course-edit-form input[type="text"],
 .course-edit-form input[type="email"],
+.course-edit-form input[type="number"],
 .course-edit-form select,
 .course-edit-form textarea,
+.module-edit-form input[type="text"],
+.module-edit-form input[type="email"],
+.module-edit-form input[type="number"],
+.module-edit-form select,
+.module-edit-form textarea,
 .course-add-form input[type="text"],
 .course-add-form input[type="email"],
+.course-add-form input[type="number"],
 .course-add-form select,
 .course-add-form textarea {
     width: 100%;
+    font-family: Arial, sans-serif;
     padding: 0.5rem 0.75rem;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -253,14 +277,22 @@ body {
 
 .user-edit-form input[type="text"]:focus,
 .user-edit-form input[type="email"]:focus,
+.user-edit-form input[type="number"]:focus,
 .user-edit-form select:focus,
 .user-edit-form textarea:focus,
 .course-edit-form input[type="text"]:focus,
 .course-edit-form input[type="email"]:focus,
+.course-edit-form input[type="number"]:focus,
 .course-edit-form select:focus,
 .course-edit-form textarea:focus,
+.module-edit-form input[type="text"]:focus,
+.module-edit-form input[type="email"]:focus,
+.module-edit-form input[type="number"]:focus,
+.module-edit-form select:focus,
+.module-edit-form textarea:focus,
 .course-add-form input[type="text"]:focus,
 .course-add-form input[type="email"]:focus,
+.course-add-form input[type="number"]:focus,
 .course-add-form select:focus,
 .course-add-form textarea:focus {
     border-color: #007bff;

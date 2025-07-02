@@ -1,3 +1,7 @@
+<?php
+
+
+?>
 <!DOCTYPE html>
 <html lang="uk">
 
@@ -19,6 +23,10 @@
         <nav class="nav_menu">
             <ul class="nav__list">
                 <li>
+                    <a href="?action=home" class="nav-link" data-action="home" style="pointer-events: none; color: gray;">
+                        <i class="fas fa-home"></i>
+                        <span class="link_name">Home</span>
+                    </a>
                     <a href="?action=users" class="nav-link" data-action="users">
                         <i class="fas fa-users"></i>
                         <span class="link_name">Користувачі</span>
@@ -47,7 +55,7 @@
 
         <div class="main-area">
             <h1>Панель адміністратора</h1>
-            <p>Оберіть дію з меню ліворуч.</p>
+            <p>Обери необхідний пункт лівіше</p>
         </div>
     </div>
 
