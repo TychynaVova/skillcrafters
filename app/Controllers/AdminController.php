@@ -73,24 +73,6 @@ class AdminController extends Controller
             case 'createCourse':
                 $this->view->renderPartial('admin/partials/add_cours_form');
                 break;
-            /*case 'lessons':
-                $courseId = $_GET['id'];
-                $lessonModel = new Lesson();
-                $lessons = $lessonModel->getByCourseId($courseId);
-                $this->view->renderPartial('admin/lessons/list', ['lessons' => $lessons, 'courseId' => $courseId]);
-                break;
-            case 'quizzes':
-                $courseId = $_GET['id'];
-                $quizModel = new Quiz();
-                $quizzes = $quizModel->getByCourseId($courseId);
-                $this->view->renderPartial('admin/quizzes/list', ['quizzes' => $quizzes, 'courseId' => $courseId]);
-                break;
-            case 'quizOptions':
-                $courseId = $_GET['id'];
-                $quizModel = new Quiz();
-                $quizzes = $quizModel->getByCourseId($courseId);
-                $this->view->renderPartial('admin/quizzes/list', ['quizzes' => $quizzes, 'courseId' => $courseId]);
-                break;*/
         }
     }
 
